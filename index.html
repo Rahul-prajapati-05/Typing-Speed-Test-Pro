@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Typing Speed Test Pro</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>⌨ Typing Speed Test Pro</h1>
+
+        <div class="top-bar">
+
+            <div>
+                <label>Time</label>
+
+                <select id="timeSelect">
+                    <option value="30">30 Sec</option>
+                    <option value="60" selected>60 Sec</option>
+                    <option value="120">120 Sec</option>
+                </select>
+            </div>
+
+            <button id="themeBtn">🌙 Dark Mode</button>
+
+            <button id="soundBtn">🔊 Sound ON</button>
+
+        </div>
+
+        <div class="progress">
+            <div id="progressBar"></div>
+        </div>
+
+        <div class="paragraph-box">
+            <p id="paragraph"></p>
+        </div>
+
+        <textarea
+            id="input"
+            placeholder="Start typing here..."
+            disabled></textarea>
+
+        <div class="cards">
+
+            <div class="card">
+                <h2 id="time">60</h2>
+                <span>Time Left</span>
+            </div>
+
+            <div class="card">
+                <h2 id="wpm">0</h2>
+                <span>WPM</span>
+            </div>
+
+            <div class="card">
+                <h2 id="accuracy">100%</h2>
+                <span>Accuracy</span>
+            </div>
+
+            <div class="card">
+                <h2 id="mistakes">0</h2>
+                <span>Mistakes</span>
+            </div>
+
+            <div class="card">
+                <h2 id="best">0</h2>
+                <span>Best WPM</span>
+            </div>
+
+        </div>
+
+        <div class="buttons">
+
+            <button id="startBtn">
+                ▶ Start
+            </button>
+
+            <button id="restartBtn">
+                🔄 Restart
+            </button>
+
+            <button id="certificateBtn">
+                📄 Download Certificate
+            </button>
+
+        </div>
+
+        <h2>Performance History</h2>
+
+        <canvas id="myChart"></canvas>
+
+        <h2>Leaderboard</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Rank</th>
+
+                    <th>WPM</th>
+
+                    <th>Accuracy</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="leaderboard">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <script src="paragraphs.js"></script>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
