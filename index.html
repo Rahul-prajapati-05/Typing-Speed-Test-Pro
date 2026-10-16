@@ -4,130 +4,384 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Typing Speed Test Pro - Test your WPM, typing accuracy, consistency, and keyboard skills with real-time feedback, sound effects, analytics, and certified performance certificates.">
+    <meta name="theme-color" content="#0f172a">
 
-    <title>Typing Speed Test Pro</title>
+    <title>Typing Speed Test Pro | Master Your Keyboard Speed & Accuracy</title>
 
+    <!-- Google Fonts: Plus Jakarta Sans for UI, JetBrains Mono for the Typing Arena -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 
+    <!-- Chart.js for Performance Visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
+    <!-- Background Glow Elements -->
+    <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
 
-    <div class="container">
+    <div class="container" id="appContainer">
 
-        <h1>⌨ Typing Speed Test Pro</h1>
-
-        <div class="top-bar">
-
-            <div>
-                <label>Time</label>
-
-                <select id="timeSelect">
-                    <option value="30">30 Sec</option>
-                    <option value="60" selected>60 Sec</option>
-                    <option value="120">120 Sec</option>
-                </select>
+        <!-- Header Bar -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon">⌨️</div>
+                <div class="brand-text">
+                    <h1>Typing Speed Test <span class="badge-pro">PRO</span></h1>
+                    <p class="brand-subtitle">Precision, Speed & Real-time Analytics</p>
+                </div>
             </div>
 
-            <button id="themeBtn">🌙 Dark Mode</button>
+            <div class="top-bar-controls">
+                <!-- Duration Selector -->
+                <div class="control-group">
+                    <label for="timeSelect" class="control-label">Duration</label>
+                    <select id="timeSelect" class="custom-select" aria-label="Select Test Duration">
+                        <option value="15">15 Sec</option>
+                        <option value="30">30 Sec</option>
+                        <option value="60" selected>60 Sec</option>
+                        <option value="120">120 Sec</option>
+                    </select>
+                </div>
 
-            <button id="soundBtn">🔊 Sound ON</button>
+                <!-- Category Selector -->
+                <div class="control-group">
+                    <label for="categorySelect" class="control-label">Category</label>
+                    <select id="categorySelect" class="custom-select" aria-label="Select Typing Category">
+                        <option value="all" selected>All Mix</option>
+                        <option value="standard">Standard</option>
+                        <option value="tech">Tech & Code</option>
+                        <option value="quotes">Famous Quotes</option>
+                        <option value="literature">Literature</option>
+                    </select>
+                </div>
 
+                <!-- Audio Toggle & Profile -->
+                <button id="soundBtn" class="pill-btn sound-btn" title="Toggle Typing Sounds (Click to cycle)">
+                    <span id="soundIcon">🔊</span>
+                    <span id="soundLabel">Mechanical</span>
+                </button>
+
+                <!-- Theme Toggle -->
+                <button id="themeBtn" class="pill-btn theme-btn" title="Toggle Dark/Light Mode">
+                    <span id="themeIcon">🌙</span>
+                    <span id="themeLabel">Dark Mode</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Progress Track -->
+        <div class="progress-wrapper">
+            <div class="progress-track">
+                <div id="progressBar" class="progress-fill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-stats">
+                <span id="progressTime">0s</span>
+                <span id="progressPercentage">0%</span>
+            </div>
         </div>
 
-        <div class="progress">
-            <div id="progressBar"></div>
-        </div>
-
-        <div class="paragraph-box">
-            <p id="paragraph"></p>
-        </div>
-
-        <textarea
-            id="input"
-            placeholder="Start typing here..."
-            disabled></textarea>
-
-        <div class="cards">
-
-            <div class="card">
-                <h2 id="time">60</h2>
-                <span>Time Left</span>
+        <!-- Live Stats Cards HUD -->
+        <section class="stats-grid" aria-label="Live Typing Metrics">
+            <div class="stat-card" id="cardTime">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-content">
+                    <h2 class="stat-value" id="time">60</h2>
+                    <span class="stat-title">Time Left</span>
+                </div>
             </div>
 
-            <div class="card">
-                <h2 id="wpm">0</h2>
-                <span>WPM</span>
+            <div class="stat-card stat-highlight" id="cardWpm">
+                <div class="stat-icon">🚀</div>
+                <div class="stat-content">
+                    <h2 class="stat-value" id="wpm">0</h2>
+                    <span class="stat-title">WPM <small>(Net)</small></span>
+                </div>
             </div>
 
-            <div class="card">
-                <h2 id="accuracy">100%</h2>
-                <span>Accuracy</span>
+            <div class="stat-card" id="cardAccuracy">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-content">
+                    <h2 class="stat-value" id="accuracy">100%</h2>
+                    <span class="stat-title">Accuracy</span>
+                </div>
             </div>
 
-            <div class="card">
-                <h2 id="mistakes">0</h2>
-                <span>Mistakes</span>
+            <div class="stat-card" id="cardMistakes">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-content">
+                    <h2 class="stat-value" id="mistakes">0</h2>
+                    <span class="stat-title">Mistakes</span>
+                </div>
             </div>
 
-            <div class="card">
-                <h2 id="best">0</h2>
-                <span>Best WPM</span>
+            <div class="stat-card" id="cardCpm">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-content">
+                    <h2 class="stat-value" id="cpm">0</h2>
+                    <span class="stat-title">CPM</span>
+                </div>
             </div>
 
-        </div>
+            <div class="stat-card" id="cardBest">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-content">
+                    <h2 class="stat-value" id="best">0</h2>
+                    <span class="stat-title">Best WPM</span>
+                </div>
+            </div>
+        </section>
 
-        <div class="buttons">
+        <!-- Typing Arena Box -->
+        <main class="typing-arena" id="typingArena" tabindex="0" role="region" aria-label="Typing Interactive Area">
+            <!-- Focus Click Overlay -->
+            <div class="arena-focus-hint" id="focusHint">
+                <span class="keyboard-icon">⌨️</span>
+                <span>Click here or start typing to begin</span>
+            </div>
 
-            <button id="startBtn">
-                ▶ Start
+            <!-- Words & Character display -->
+            <div class="text-display-box" id="paragraphBox">
+                <div id="paragraph" class="paragraph-text" aria-live="polite"></div>
+            </div>
+
+            <!-- Invisible Native Input to capture typing safely & smoothly -->
+            <input
+                type="text"
+                id="input"
+                class="hidden-input"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                aria-label="Typing Input Field"
+            />
+        </main>
+
+        <!-- Control Action Bar -->
+        <nav class="action-bar" aria-label="Main Controls">
+            <button id="startBtn" class="action-btn btn-primary" title="Start Typing Test (Enter)">
+                <span class="btn-icon">▶</span>
+                <span>Start Test</span>
             </button>
 
-            <button id="restartBtn">
-                🔄 Restart
+            <button id="restartBtn" class="action-btn btn-secondary" title="Restart Test (Tab + Enter)">
+                <span class="btn-icon">🔄</span>
+                <span>Restart</span>
             </button>
 
-            <button id="certificateBtn">
-                📄 Download Certificate
+            <button id="newPassageBtn" class="action-btn btn-outline" title="Generate New Passage">
+                <span class="btn-icon">🎲</span>
+                <span>New Passage</span>
             </button>
 
+            <button id="certificateBtn" class="action-btn btn-accent" title="Generate Verified Certificate">
+                <span class="btn-icon">📜</span>
+                <span>Certificate</span>
+            </button>
+        </nav>
+
+        <!-- Keyboard Shortcut Helper Tip -->
+        <div class="shortcut-tip">
+            <span>💡 <b>Pro Tips:</b> Press <kbd>Tab</kbd> + <kbd>Enter</kbd> to quickly restart • Simply type to start automatically • <kbd>Esc</kbd> to reset</span>
         </div>
 
-        <h2>Performance History</h2>
+        <!-- Analytics and Charts Section -->
+        <section class="section-card chart-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">📈 Performance Analytics</h2>
+                    <p class="section-subtitle">Speed and consistency progression across recent tests</p>
+                </div>
+                <button id="resetChartBtn" class="btn-text-danger" title="Clear Performance History">Clear History</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="myChart" aria-label="WPM Progression Chart" role="img"></canvas>
+            </div>
+        </section>
 
-        <canvas id="myChart"></canvas>
+        <!-- Leaderboard Section -->
+        <section class="section-card leaderboard-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">🏆 Top Records & Leaderboard</h2>
+                    <p class="section-subtitle">Your personal best typing achievements</p>
+                </div>
+                <span class="badge-counter" id="totalTestsCount">0 Tests Taken</span>
+            </div>
 
-        <h2>Leaderboard</h2>
+            <div class="table-responsive">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 80px;">Rank</th>
+                            <th scope="col">Typist</th>
+                            <th scope="col">Speed (WPM)</th>
+                            <th scope="col">Accuracy</th>
+                            <th scope="col">Mode</th>
+                            <th scope="col">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard">
+                        <!-- Dynamic Leaderboard Entries -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-        <table>
+        <footer class="app-footer">
+            <p>Designed with ❤️ for typists, programmers, and speed enthusiasts • <strong>Typing Speed Test Pro</strong></p>
+        </footer>
 
-            <thead>
+    </div> <!-- /.container -->
 
-                <tr>
+    <!-- Test Completion Modal -->
+    <div class="modal-overlay" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle" hidden>
+        <div class="modal-card">
+            <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+            
+            <div class="modal-header">
+                <div class="result-badge" id="resultRankBadge">🏎️ PRO TYPIST</div>
+                <h2 id="resultTitle" class="modal-title">Test Completed!</h2>
+                <p id="resultSubtitle" class="modal-subtitle">Here is a comprehensive breakdown of your performance</p>
+            </div>
 
-                    <th>Rank</th>
+            <div class="result-stats-grid">
+                <div class="result-stat-item highlight">
+                    <span class="result-stat-label">Net Speed</span>
+                    <span class="result-stat-value" id="finalWpm">0</span>
+                    <span class="result-stat-unit">WPM</span>
+                </div>
+                <div class="result-stat-item">
+                    <span class="result-stat-label">Gross Speed</span>
+                    <span class="result-stat-value" id="finalRawWpm">0</span>
+                    <span class="result-stat-unit">WPM</span>
+                </div>
+                <div class="result-stat-item">
+                    <span class="result-stat-label">Accuracy</span>
+                    <span class="result-stat-value" id="finalAccuracy">100%</span>
+                    <span class="result-stat-unit">Acc</span>
+                </div>
+                <div class="result-stat-item">
+                    <span class="result-stat-label">Keystrokes</span>
+                    <span class="result-stat-value" id="finalKeystrokes">0</span>
+                    <span class="result-stat-unit">Total</span>
+                </div>
+                <div class="result-stat-item">
+                    <span class="result-stat-label">Errors</span>
+                    <span class="result-stat-value" id="finalMistakes">0</span>
+                    <span class="result-stat-unit">Mistakes</span>
+                </div>
+                <div class="result-stat-item">
+                    <span class="result-stat-label">Consistency</span>
+                    <span class="result-stat-value" id="finalConsistency">95%</span>
+                    <span class="result-stat-unit">Score</span>
+                </div>
+            </div>
 
-                    <th>WPM</th>
+            <!-- Save Score to Leaderboard form -->
+            <div class="save-score-form">
+                <label for="typistNameInput" class="form-label">Save to Leaderboard</label>
+                <div class="input-action-group">
+                    <input type="text" id="typistNameInput" placeholder="Enter your name or handle..." maxlength="25" />
+                    <button id="saveScoreBtn" class="pill-btn btn-primary">Save Score</button>
+                </div>
+            </div>
 
-                    <th>Accuracy</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="leaderboard">
-
-            </tbody>
-
-        </table>
-
+            <div class="modal-actions">
+                <button id="modalRestartBtn" class="action-btn btn-primary">🔄 Try Again</button>
+                <button id="modalCertBtn" class="action-btn btn-accent">📜 Certificate</button>
+                <button id="modalCloseBtn" class="action-btn btn-outline">Close</button>
+            </div>
+        </div>
     </div>
 
+    <!-- Certificate Generator Modal -->
+    <div class="modal-overlay" id="certModal" role="dialog" aria-modal="true" aria-labelledby="certModalTitle" hidden>
+        <div class="modal-card cert-modal-card">
+            <div class="cert-modal-header">
+                <h2 id="certModalTitle" class="modal-title">Official Performance Certificate</h2>
+                <button id="closeCertModalBtn" class="modal-close-icon" aria-label="Close modal">&times;</button>
+            </div>
+
+            <!-- Printable Certificate Document -->
+            <div class="certificate-container" id="certificatePrintArea">
+                <div class="cert-outer-border">
+                    <div class="cert-inner-border">
+                        <div class="cert-watermark">PRO</div>
+                        
+                        <div class="cert-header">
+                            <div class="cert-badge">🏅 CERTIFICATE OF PROFICIENCY</div>
+                            <h2 class="cert-title">TYPING SPEED TEST PRO</h2>
+                            <p class="cert-certifies">This is officially awarded to</p>
+                            <h3 class="cert-candidate-name" id="certCandidateName">Master Typist</h3>
+                            <div class="cert-divider"></div>
+                        </div>
+
+                        <div class="cert-body">
+                            <p class="cert-text">
+                                For successfully completing the standardized keyboard typing assessment, demonstrating remarkable typing precision, fluidity, and dexterity.
+                            </p>
+
+                            <div class="cert-metrics-row">
+                                <div class="cert-metric-badge">
+                                    <span class="cert-metric-num" id="certWpm">0</span>
+                                    <span class="cert-metric-lbl">Words Per Minute</span>
+                                </div>
+                                <div class="cert-metric-badge">
+                                    <span class="cert-metric-num" id="certAccuracy">100%</span>
+                                    <span class="cert-metric-lbl">Accuracy</span>
+                                </div>
+                                <div class="cert-metric-badge">
+                                    <span class="cert-metric-num" id="certRank">Expert</span>
+                                    <span class="cert-metric-lbl">Skill Tier</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cert-footer">
+                            <div class="cert-footer-col">
+                                <p class="cert-date" id="certDate">October 16, 2026</p>
+                                <span class="cert-footer-label">Date of Assessment</span>
+                            </div>
+                            <div class="cert-seal">
+                                <div class="seal-icon">★</div>
+                                <span>VERIFIED PRO</span>
+                            </div>
+                            <div class="cert-footer-col">
+                                <p class="cert-signature">TypingSpeedTest.pro</p>
+                                <span class="cert-footer-label">Authorized Verification</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cert-actions">
+                <div class="cert-name-edit">
+                    <label for="editCertName">Name on Certificate:</label>
+                    <input type="text" id="editCertName" value="Master Typist" maxlength="30" />
+                </div>
+                <div class="cert-buttons">
+                    <button id="printCertBtn" class="action-btn btn-accent">🖨️ Print / Download PDF</button>
+                    <button id="dismissCertBtn" class="action-btn btn-outline">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <!-- Scripts -->
     <script src="paragraphs.js"></script>
-
     <script src="script.js"></script>
-
 </body>
 
 </html>
